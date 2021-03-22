@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { User } from '../users/user.entity';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
@@ -23,7 +23,7 @@ export class AuthService {
     const user = await this.usersService.findOne(username);
 
     // If user available and password matched then logged in
-    if (user && user.validatePassword(password)) {
+    if (user && (await user.validatePassword(password))) {
       // Fetch all the user data except password -> Security
       const { password, ...userResult } = user;
 
@@ -31,7 +31,7 @@ export class AuthService {
     }
 
     // Otherwise invalid username or password
-    return null;
+    throw new UnauthorizedException('Invalid username or password');
   }
 
   /**
