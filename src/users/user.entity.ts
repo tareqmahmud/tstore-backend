@@ -6,14 +6,17 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: true })
+  @Column()
   firstName: string;
 
-  @Column({ nullable: true })
+  @Column()
   lastName: string;
 
-  @Column({ unique: true })
-  username: string;
+  @Column({ nullable: true })
+  avatar: string;
+
+  @Column({ nullable: true })
+  sex: string;
 
   @Column({ unique: true })
   email: string;
@@ -21,8 +24,23 @@ export class User {
   @Column()
   password: string;
 
+  @Column()
+  verifyEmail: boolean;
+
+  @Column({ nullable: true })
+  verifyEmailToken: string;
+
+  @Column({ nullable: true })
+  passwordResetToken: string;
+
+  @Column({ nullable: true })
+  passwordResetTokenExpireIn: Date;
+
   @Column({ default: true })
   isActive: boolean;
+
+  @Column({ default: 'USER' })
+  userType: string;
 
   /**
    * Method to check is password valid or not
