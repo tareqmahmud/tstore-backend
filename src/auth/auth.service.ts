@@ -1,5 +1,4 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { User } from '../users/user.entity';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { UserSignupDto } from './dto/user-signup.dto';
@@ -15,12 +14,12 @@ export class AuthService {
   /**
    * Validate user credentials with username and password
    *
-   * @param username
+   * @param email
    * @param password
    */
-  async validateUser(username: string, password: string): Promise<any> {
+  async validateUser(email: string, password: string): Promise<any> {
     // Check is user available or not
-    const user = await this.usersService.findOne(username);
+    const user = await this.usersService.findOne(email);
 
     // If user available and password matched then logged in
     if (user && (await user.validatePassword(password))) {
@@ -31,7 +30,7 @@ export class AuthService {
     }
 
     // Otherwise invalid username or password
-    throw new UnauthorizedException('Invalid username or password');
+    throw new UnauthorizedException('Invalid email or password');
   }
 
   /**
@@ -41,7 +40,7 @@ export class AuthService {
    */
   async login(user: any) {
     const payload = {
-      username: user.username,
+      email: user.email,
       sub: user.id,
     };
 

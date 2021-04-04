@@ -9,10 +9,6 @@ export class UserSignupDto {
   @IsOptional()
   lastName: string;
 
-  @IsString()
-  @IsNotEmpty()
-  username: string;
-
   @IsEmail()
   @IsNotEmpty()
   email: string;

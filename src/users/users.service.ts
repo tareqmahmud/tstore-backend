@@ -20,11 +20,11 @@ export class UsersService {
   /**
    * Find out a user with username
    *
-   * @param username
+   * @param email
    */
-  async findOne(username: string): Promise<User> {
+  async findOne(email: string): Promise<User> {
     return this.usersRepository.findOne({
-      where: { username },
+      where: { email },
     });
   }
 
@@ -35,16 +35,6 @@ export class UsersService {
    */
   async createNewUser(newUserDto: NewUserDto): Promise<UserType> {
     // Check unique username and email
-
-    // If existing username is available then throw bad request
-    const existingUsername = await this.usersRepository.findOne({
-      where: { username: newUserDto.username },
-    });
-
-    if (existingUsername) {
-      throw new BadRequestException('Username already exists');
-    }
-
     // If existing email is available then throw bad request
     const existingEmail = await this.usersRepository.findOne({
       where: { email: newUserDto.email },
@@ -58,7 +48,6 @@ export class UsersService {
     const newUser = new User();
     newUser.firstName = newUserDto.firstName ? newUserDto.firstName : null;
     newUser.lastName = newUserDto.lastName ? newUserDto.lastName : null;
-    newUser.username = newUserDto.username;
     newUser.email = newUserDto.email;
     newUser.password = await PasswordHelper.encryptPassword(
       newUserDto.password,
